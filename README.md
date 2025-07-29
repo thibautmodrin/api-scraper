@@ -28,58 +28,84 @@ Une API FastAPI qui déclenche un scraping quotidien de la plateforme [Free-Work
 
 ## 🧱 Structure du projet
 
-```
+```bash
 ├── app/
-│ ├── main.py # L’API FastAPI (endpoints)
-│ ├── scraper.py # Spider Scrapy pour Free-Work
-│ ├── database.py # Connexion et logique PostgreSQL
-│ ├── Dockerfile # Dockerisation de l’API
-├── README.md # Ce fichier
-├── .env # Variables d’environnement (DATABASE_URL)
+│   ├── main.py            # L’API FastAPI (endpoints)
+│   ├── scraper.py         # Spider Scrapy pour Free-Work
+│   ├── database.py        # Connexion et logique PostgreSQL
+│   ├── Dockerfile         # Dockerisation de l’API
+├── README.md              # Ce fichier
+├── .env                   # Variables d’environnement (DATABASE_URL)
 ```
+
 ---
 
 ## ⚙️ Configuration
 
 ### 🔐 Variables d’environnement
 
-Créer un fichier `.env` (non versionné) :
+Créer un fichier `.env` :
 
 ```env
 DATABASE_URL=postgresql://<user>:<password>@<host>/<dbname>
 ```
 
-▶️ Lancer en local
-1. Cloner le projet
+---
+
+## ▶️ Lancer en local
+
+1. **Cloner le projet**
+
+```bash
 git clone <lien_du_repo>
 cd scraper_api
+```
 
-3. Installer les dépendances
+2. **Installer les dépendances**
+
+```bash
 pip install -r requirements.txt
+```
 
-5. Lancer l’API
+3. **Lancer l’API**
+
+```bash
 uvicorn main:app --reload
+```
 
+---
 
-🧪 Endpoints disponibles
+## 🧪 Endpoints disponibles
 
-Méthode	URL	Description
-GET	/annonces/	Récupère toutes les offres en BDD
+| Méthode | URL                                                   | Description                              |
+|---------|--------------------------------------------------------|------------------------------------------|
+| GET     | `/annonces/`                                          | Récupère toutes les offres en BDD        |
+| POST    | `/run-scraper/?keyword=data%20engineer`               | Lance le scraping pour un mot-clé donné  |
 
-POST	/run-scraper/?keyword=data%20engineer	Lance le scraping pour un mot-clé donné
+---
 
-🕒 Déclencher automatiquement chaque jour (cron)
+## 🕒 Déclenchement automatique (cron)
 
-Linux crontab -e :
+Ajoute cette ligne à ton `crontab` (`crontab -e`) pour déclencher tous les jours à 9h :
+
+```bash
 0 9 * * * curl -X POST "https://api-scraper-6js4.onrender.com/run-scraper/?keyword=data%20engineer"
+```
 
-🐳 Docker
-Lancer avec Docker
+---
+
+## 🐳 Lancer avec Docker
+
+```bash
 docker build -t scraper-api .
 docker run -p 8000:8000 -e DATABASE_URL=postgresql://... scraper-api
-
-🗃️ Base de données (tables attendues)
 ```
+
+---
+
+## 🗃️ Base de données (tables attendues)
+
+```sql
 -- Table des offres
 CREATE TABLE offres (
   id SERIAL PRIMARY KEY,
@@ -102,24 +128,32 @@ CREATE TABLE scraping_logs (
   keyword TEXT,
   date DATE
 );
-
 ```
 
-📈 Visualisation No-code (optionnel)
-Tu peux connecter ta base PostgreSQL à :
+---
 
-Metabase
+## 📈 Visualisation No-code (optionnel)
 
-NocoDB
+Tu peux connecter ta base PostgreSQL à des outils comme :
 
-Budibase
-
-📄 Licence
-Ce projet est sous licence MIT.
-
-🙌 Auteur
-Développé par @burgovida21 — Data Engineer / Freelance / Android Developer.
+- [Metabase](https://www.metabase.com/)
+- [NocoDB](https://www.nocodb.com/)
 
 
+---
 
-Souhaites-tu que je te le mette directement dans un fichier `README.md` prêt à télécharger ?
+## 📄 Licence
+
+Ce projet est sous licence **MIT**.
+
+---
+
+## 🙌 Auteur
+
+Développé par **[@burgovida21](https://github.com/ton-profil)**  
+Data Engineer / Freelance / Android Developer.
+```
+
+---
+
+Souhaites-tu que je t’envoie ce contenu dans un fichier `README.md` à télécharger directement ?
