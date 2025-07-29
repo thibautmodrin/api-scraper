@@ -43,6 +43,7 @@ def is_offer_already_exists(titre: str, entreprise: str, lieu: str) -> bool:
     return result is not None
 
 def insert_offer(offer: dict):
+    print("📥 Inserting offer:", offer["titre"])  # Pour debug
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("""
