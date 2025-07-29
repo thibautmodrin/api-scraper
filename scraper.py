@@ -12,39 +12,49 @@ class FreeWorkSpider(scrapy.Spider):
         self.start_urls = [f"https://www.free-work.com/fr/tech-it/jobs?query={self.keyword}"]
 
     def parse(self, response):
-        # Cartes d'offres
-        cards = response.xpath("//div[@class='relative group']")
+        # 🔍 Cartes d'offres
+        cards = response.xpath("/html/body/div[1]/div/div/div/div[1]/div[2]/div/div/div[1]/div/div")
         for card in cards:
-            titre = card.xpath(".//h2/a/@href").get()
+            titre = card.xpath(".//div[1]/div/h2/a/@href").get()
+            type1 = card.xpath(".//div[1]/div/div[1]/div/span[1]/div/text()").get()
+            type2 = card.xpath(".//div[1]/div/div[1]/div/span[2]/div/text()").get()
             entreprise = card.xpath('.//div[contains(@class, "font-bold")]/text()').get()
-            lieu = card.xpath('.//span[contains(text(), "Lieu")]/following-sibling::span//text()').get()
+            technos = card.xpath('.//a[contains(@class, "tag") and contains(@class, "bg-brand-75") and contains(@class, "text-brand-500")]/div/span[@class="fw-text-highlight"]/text()').getall()
+            technos = [t.strip() for t in technos if t.strip()]
+            duree = card.xpath('.//span[contains(text(), "Durée")]/following-sibling::span//span[contains(@class, "text-sm")]/text()').get()
+            salaire = card.xpath('.//span[contains(text(), "Salaire")]/following-sibling::span//span[contains(@class, "text-sm")]/text()').get()
+            tjm = card.xpath('.//span[contains(text(), "TJM")]/following-sibling::span//span[contains(@class, "text-sm")]/text()').get()
+            teletravail = card.xpath('.//span[contains(text(), "Télétravail")]/following-sibling::span//span[contains(@class, "text-sm")]/text()').get()
+            lieu = card.xpath('.//span[contains(text(), "Lieu")]/following-sibling::span//span[contains(@class, "text-sm")]/text()').get()
 
-            if titre and not is_offer_already_exists(titre.strip(), entreprise or "", lieu or ""):
-                technos = card.xpath('.//a[contains(@class, "tag")]/div/span/text()').getall()
-                technos = [t.strip() for t in technos if t.strip()]
-                duree = card.xpath('.//span[contains(text(), "Durée")]/following-sibling::span//text()').get()
-                salaire = card.xpath('.//span[contains(text(), "Salaire")]/following-sibling::span//text()').get()
-                tjm = card.xpath('.//span[contains(text(), "TJM")]/following-sibling::span//text()').get()
-                teletravail = card.xpath('.//span[contains(text(), "Télétravail")]/following-sibling::span//text()').get()
+            if titre:
+                titre_format = " ".join(map(str.capitalize, titre.split("/")[-1].split("-")))
+                type1_clean = type1.replace(" ", "").replace("\n", "").replace("\r", "") if type1 else ""
+                type2_clean = type2.replace(" ", "").replace("\n", "").replace("\r", "") if type2 else ""
 
-                insert_offer({
-                    "type": "Freelance",
-                    "titre": titre.strip(),
-                    "entreprise": entreprise.strip() if entreprise else "",
-                    "technos": technos,
-                    "duree": duree.strip() if duree else "",
-                    "salaire": salaire.strip() if salaire else "",
-                    "tjm": tjm.strip() if tjm else "",
-                    "teletravail": teletravail.strip() if teletravail else "",
-                    "lieu": lieu.strip() if lieu else "",
-                    "date_extraction": datetime.now().date(),
-                    "keyword": self.keyword.replace("%20", " "),
-                })
+                if not is_offer_already_exists(titre_format, entreprise or "", lieu or ""):
+                    try:
+                        insert_offer({
+                            "type": f"{type1_clean} {type2_clean}".strip(),
+                            "titre": titre_format,
+                            "entreprise": entreprise.strip() if entreprise else "",
+                            "technos": technos,
+                            "duree": duree.strip() if duree else "",
+                            "salaire": salaire.strip() if salaire else "",
+                            "tjm": tjm.strip() if tjm else "",
+                            "teletravail": teletravail.strip() if teletravail else "",
+                            "lieu": lieu.strip() if lieu else "",
+                            "date_extraction": datetime.now().date(),
+                            "keyword": self.keyword.replace("%20", " "),
+                        })
+                        self.logger.info(f"[✓] Offre insérée : {titre_format}")
+                    except Exception as e:
+                        self.logger.warning(f"[!] Erreur insertion : {e}")
 
-        # 💡 Pagination : on suit le bouton de page suivante s’il existe
-        next_button = response.xpath('//button[@data-page and not(@disabled)][last()]')
-        if next_button:
-            next_page_number = next_button.attrib.get("data-page")
-            if next_page_number:
-                next_page_url = f"https://www.free-work.com/fr/tech-it/jobs?query={self.keyword}&page={next_page_number}"
-                yield response.follow(next_page_url, callback=self.parse)
+        # 🔁 Pagination
+        button_next_end = response.xpath("/html/body/div[1]/div/div/div/div[1]/div[2]/div/div/div[1]/div/div[8]/div[1]/button[2][contains(@class, 'bg-gray-200')]")
+        page = response.xpath("/html/body/div/div/div/div/div[1]/div[2]/div/div/div[1]/div/div[18]/div[1]/button[2]").attrib.get("data-page")
+        if not button_next_end and page:
+            next_page = f"https://www.free-work.com/fr/tech-it/jobs?query={self.keyword}&page={page}"
+            self.logger.info(f"→ Page suivante : {next_page}")
+            yield response.follow(next_page, callback=self.parse)
