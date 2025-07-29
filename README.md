@@ -150,10 +150,8 @@ Ce projet est sous licence **MIT**.
 
 ## 🙌 Auteur
 
-Développé par **[@burgovida21](https://github.com/ton-profil)**  
+Développé par **[Thibaut Modrin](https://github.com/ton-profil)**  
 Data Engineer / Freelance / Android Developer.
-```
 
----
 
-Souhaites-tu que je t’envoie ce contenu dans un fichier `README.md` à télécharger directement ?
+
