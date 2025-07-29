@@ -22,7 +22,14 @@ def run_scraper(keyword: str):
         raise HTTPException(status_code=400, detail="Scraping déjà effectué aujourd'hui")
 
     try:
-        process = CrawlerProcess(settings={"LOG_LEVEL": "DEBUG"})  # DEBUG pour plus de détails
+        process = CrawlerProcess(
+            settings={
+                "LOG_LEVEL": "DEBUG",
+                "USER_AGENT": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+                "AUTOTHROTTLE_ENABLED": True,
+                "AUTOTHROTTLE_START_DELAY": 1,
+                "AUTOTHROTTLE_MAX_DELAY": 60
+                })  # DEBUG pour plus de détails
         process.crawl(FreeWorkSpider, keyword=keyword.replace(" ", "%20"))
         process.start()
         log_scraping(keyword)
