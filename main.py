@@ -25,6 +25,7 @@ def run_scraper(keyword: str):
         process = CrawlerProcess(
             settings={
                 "LOG_LEVEL": "DEBUG",
+                "TELNETCONSOLE_ENABLED": False,
                 "USER_AGENT": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
                 "AUTOTHROTTLE_ENABLED": True,
                 "AUTOTHROTTLE_START_DELAY": 1,
