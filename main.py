@@ -1,5 +1,5 @@
 from fastapi import FastAPI, HTTPException
-from database import connect_to_db, has_already_scraped_today, log_scraping
+from database import get_db_connection, has_already_scraped_today, log_scraping
 from scrapy.crawler import CrawlerProcess
 from scraper import FreeWorkSpider
 from psycopg2.extras import RealDictCursor
@@ -8,7 +8,7 @@ app = FastAPI()
 
 @app.get("/annonces/")
 def get_all_annonces():
-    conn = connect_to_db()
+    conn = get_db_connection()
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     cursor.execute("SELECT * FROM offres ORDER BY date_extraction DESC")
     results = cursor.fetchall()
