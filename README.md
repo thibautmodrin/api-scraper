@@ -51,43 +51,33 @@ DATABASE_URL=postgresql://<user>:<password>@<host>/<dbname>
 
 ▶️ Lancer en local
 1. Cloner le projet
-bash
-Copier
-Modifier
 git clone <lien_du_repo>
 cd scraper_api
-2. Installer les dépendances
-bash
-Copier
-Modifier
+
+3. Installer les dépendances
 pip install -r requirements.txt
-3. Lancer l’API
-bash
-Copier
-Modifier
+
+5. Lancer l’API
 uvicorn main:app --reload
+
+
 🧪 Endpoints disponibles
+
 Méthode	URL	Description
 GET	/annonces/	Récupère toutes les offres en BDD
 POST	/run-scraper/?keyword=data%20engineer	Lance le scraping pour un mot-clé donné
 
 🕒 Déclencher automatiquement chaque jour (cron)
 Linux crontab -e :
-bash
-Copier
-Modifier
 0 9 * * * curl -X POST "https://api-scraper-6js4.onrender.com/run-scraper/?keyword=data%20engineer"
+
 🐳 Docker
 Lancer avec Docker
-bash
-Copier
-Modifier
 docker build -t scraper-api .
 docker run -p 8000:8000 -e DATABASE_URL=postgresql://... scraper-api
+
 🗃️ Base de données (tables attendues)
-sql
-Copier
-Modifier
+```
 -- Table des offres
 CREATE TABLE offres (
   id SERIAL PRIMARY KEY,
@@ -110,6 +100,9 @@ CREATE TABLE scraping_logs (
   keyword TEXT,
   date DATE
 );
+
+```
+
 📈 Visualisation No-code (optionnel)
 Tu peux connecter ta base PostgreSQL à :
 
@@ -125,8 +118,6 @@ Ce projet est sous licence MIT.
 🙌 Auteur
 Développé par @burgovida21 — Data Engineer / Freelance / Android Developer.
 
-bash
-Copier
-Modifier
+
 
 Souhaites-tu que je te le mette directement dans un fichier `README.md` prêt à télécharger ?
