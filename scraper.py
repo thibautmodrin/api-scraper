@@ -13,7 +13,7 @@ class FreeWorkSpider(scrapy.Spider):
 
     def parse(self, response):
         # 🔍 Cartes d'offres
-        cards = response.xpath("/html/body/div[1]/div/div/div/div[1]/div[2]/div/div/div[1]/div/div")
+        cards = response.xpath("//div[contains(@class, 'relative') and .//h2/a]")
         for card in cards:
             titre = card.xpath(".//div[1]/div/h2/a/@href").get()
             type1 = card.xpath(".//div[1]/div/div[1]/div/span[1]/div/text()").get()
