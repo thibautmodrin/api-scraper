@@ -25,6 +25,39 @@ def log_scraping(keyword: str):
         "INSERT INTO scraping_logs (keyword, date) VALUES (%s, %s)",
         (keyword, date.today())
     )
+
+
+def is_offer_already_exists(titre: str, entreprise: str, lieu: str) -> bool:
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT 1 FROM offres
+        WHERE titre = %s AND entreprise = %s AND lieu = %s
+    """, (titre, entreprise, lieu))
+    result = cursor.fetchone()
+    cursor.close()
+    conn.close()
+    return result is not None
+
+def insert_offer(offer: dict):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+        INSERT INTO offres (type, titre, entreprise, technos, duree, salaire, tjm, teletravail, lieu, date_extraction, keyword)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+    """, (
+        offer["type"],
+        offer["titre"],
+        offer["entreprise"],
+        offer["technos"],
+        offer["duree"],
+        offer["salaire"],
+        offer["tjm"],
+        offer["teletravail"],
+        offer["lieu"],
+        offer["date_extraction"],
+        offer["keyword"],
+    ))
     conn.commit()
     cursor.close()
     conn.close()
