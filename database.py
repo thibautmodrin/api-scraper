@@ -2,16 +2,9 @@ import os
 import psycopg2
 from datetime import date
 
-
 def get_db_connection():
-    return psycopg2.connect(
-        host=os.getenv("DB_HOST"),
-        port=os.getenv("DB_PORT", 5432),
-        dbname=os.getenv("DB_NAME"),
-        user=os.getenv("DB_USER"),
-        password=os.getenv("DB_PASSWORD"),
-    )
-
+    # Utilise directement la chaîne de connexion DATABASE_URL (format PostgreSQL standard)
+    return psycopg2.connect(os.getenv("DATABASE_URL"))
 
 def has_already_scraped_today(keyword: str) -> bool:
     conn = get_db_connection()
