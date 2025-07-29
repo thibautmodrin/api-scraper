@@ -25,6 +25,9 @@ def log_scraping(keyword: str):
         "INSERT INTO scraping_logs (keyword, date) VALUES (%s, %s)",
         (keyword, date.today())
     )
+    conn.commit()  # ⬅️ Ajoute cette ligne !!
+    cursor.close()
+    conn.close()
 
 
 def is_offer_already_exists(titre: str, entreprise: str, lieu: str) -> bool:
