@@ -65,9 +65,11 @@ uvicorn main:app --reload
 
 Méthode	URL	Description
 GET	/annonces/	Récupère toutes les offres en BDD
+
 POST	/run-scraper/?keyword=data%20engineer	Lance le scraping pour un mot-clé donné
 
 🕒 Déclencher automatiquement chaque jour (cron)
+
 Linux crontab -e :
 0 9 * * * curl -X POST "https://api-scraper-6js4.onrender.com/run-scraper/?keyword=data%20engineer"
 
