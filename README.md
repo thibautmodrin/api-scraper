@@ -25,3 +25,108 @@ Une API FastAPI qui déclenche un scraping quotidien de la plateforme [Free-Work
 - `NocoDB`, `Metabase` – (optionnel) Visualisation no-code
 
 ---
+
+## 🧱 Structure du projet
+
+```
+├── app/
+│ ├── main.py # L’API FastAPI (endpoints)
+│ ├── scraper.py # Spider Scrapy pour Free-Work
+│ ├── database.py # Connexion et logique PostgreSQL
+│ ├── Dockerfile # Dockerisation de l’API
+├── README.md # Ce fichier
+├── .env # Variables d’environnement (DATABASE_URL)
+```
+---
+
+## ⚙️ Configuration
+
+### 🔐 Variables d’environnement
+
+Créer un fichier `.env` (non versionné) :
+
+```env
+DATABASE_URL=postgresql://<user>:<password>@<host>/<dbname>
+```
+
+▶️ Lancer en local
+1. Cloner le projet
+bash
+Copier
+Modifier
+git clone <lien_du_repo>
+cd scraper_api
+2. Installer les dépendances
+bash
+Copier
+Modifier
+pip install -r requirements.txt
+3. Lancer l’API
+bash
+Copier
+Modifier
+uvicorn main:app --reload
+🧪 Endpoints disponibles
+Méthode	URL	Description
+GET	/annonces/	Récupère toutes les offres en BDD
+POST	/run-scraper/?keyword=data%20engineer	Lance le scraping pour un mot-clé donné
+
+🕒 Déclencher automatiquement chaque jour (cron)
+Linux crontab -e :
+bash
+Copier
+Modifier
+0 9 * * * curl -X POST "https://api-scraper-6js4.onrender.com/run-scraper/?keyword=data%20engineer"
+🐳 Docker
+Lancer avec Docker
+bash
+Copier
+Modifier
+docker build -t scraper-api .
+docker run -p 8000:8000 -e DATABASE_URL=postgresql://... scraper-api
+🗃️ Base de données (tables attendues)
+sql
+Copier
+Modifier
+-- Table des offres
+CREATE TABLE offres (
+  id SERIAL PRIMARY KEY,
+  type TEXT,
+  titre TEXT,
+  entreprise TEXT,
+  technos TEXT[],
+  duree TEXT,
+  salaire TEXT,
+  tjm TEXT,
+  teletravail TEXT,
+  lieu TEXT,
+  date_extraction DATE,
+  keyword TEXT
+);
+
+-- Table des logs de scraping
+CREATE TABLE scraping_logs (
+  id SERIAL PRIMARY KEY,
+  keyword TEXT,
+  date DATE
+);
+📈 Visualisation No-code (optionnel)
+Tu peux connecter ta base PostgreSQL à :
+
+Metabase
+
+NocoDB
+
+Budibase
+
+📄 Licence
+Ce projet est sous licence MIT.
+
+🙌 Auteur
+Développé par @burgovida21 — Data Engineer / Freelance / Android Developer.
+
+bash
+Copier
+Modifier
+
+Souhaites-tu que je te le mette directement dans un fichier `README.md` prêt à télécharger ?
