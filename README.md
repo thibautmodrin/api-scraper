@@ -1,28 +1,30 @@
-# 🚀 Scraper API Freelance – Free-Work
 
-Une API FastAPI qui déclenche un scraping quotidien de la plateforme [Free-Work](https://www.free-work.com/fr/tech-it/jobs), stocke les offres dans une base PostgreSQL, et expose les résultats via une API REST.
+
+# 🚀 Scraper API Freelance – Plateforme de missions
+
+Une API FastAPI qui déclenche un scraping quotidien d’une plateforme publique de missions freelance, stocke les offres dans une base PostgreSQL, et expose les résultats via une API REST.
 
 ---
 
 ## 📦 Fonctionnalités
 
-- 🔎 Scraping des offres de missions via `Scrapy` à partir d'un mot-clé
-- 🧠 Détection des offres déjà existantes pour éviter les doublons
-- 🗓️ Historique des scrapes par date et mot-clé (table `scraping_logs`)
-- 🌐 API REST pour consulter les offres (`/annonces/`) et lancer un scraping (`/run-scraper/`)
-- 💾 Stockage PostgreSQL (local ou distant via Render)
-- 📊 Intégration possible avec Metabase, NocoDB, etc.
+* 🔎 Scraping des offres via `Scrapy` à partir d’un mot-clé
+* 🧠 Détection des doublons pour éviter les répétitions
+* 🗓️ Historique des extractions (par date et mot-clé)
+* 🌐 API REST pour consulter les offres (`/annonces/`) et déclencher un scraping (`/run-scraper/`)
+* 💾 Stockage PostgreSQL (local ou distant)
+* 📊 Intégration possible avec Metabase, NocoDB, etc.
 
 ---
 
 ## 🛠️ Stack Technique
 
-- `FastAPI` – API REST
-- `Scrapy` – Web scraping
-- `PostgreSQL` – Base de données relationnelle
-- `Docker` / `Docker Compose` – Conteneurisation
-- `Render.com` – Hébergement PostgreSQL ou API
-- `NocoDB`, `Metabase` – (optionnel) Visualisation no-code
+* `FastAPI` – API REST
+* `Scrapy` – Web scraping
+* `PostgreSQL` – Base de données relationnelle
+* `Docker` / `Docker Compose` – Conteneurisation
+* `Render.com` – Hébergement
+* `Metabase`, `NocoDB` – (optionnel) Visualisation no-code
 
 ---
 
@@ -31,7 +33,7 @@ Une API FastAPI qui déclenche un scraping quotidien de la plateforme [Free-Work
 ```bash
 ├── app/
 │   ├── main.py            # L’API FastAPI (endpoints)
-│   ├── scraper.py         # Spider Scrapy pour Free-Work
+│   ├── scraper.py         # Spider Scrapy
 │   ├── database.py        # Connexion et logique PostgreSQL
 │   ├── Dockerfile         # Dockerisation de l’API
 ├── README.md              # Ce fichier
@@ -77,10 +79,10 @@ uvicorn main:app --reload
 
 ## 🧪 Endpoints disponibles
 
-| Méthode | URL                                                   | Description                              |
-|---------|--------------------------------------------------------|------------------------------------------|
-| GET     | `/annonces/`                                          | Récupère toutes les offres en BDD        |
-| POST    | `/run-scraper/?keyword=data%20engineer`               | Lance le scraping pour un mot-clé donné  |
+| Méthode | URL                                     | Description                             |
+| ------- | --------------------------------------- | --------------------------------------- |
+| GET     | `/annonces/`                            | Récupère toutes les offres en BDD       |
+| POST    | `/run-scraper/?keyword=data%20engineer` | Lance le scraping pour un mot-clé donné |
 
 ---
 
@@ -136,22 +138,13 @@ CREATE TABLE scraping_logs (
 
 Tu peux connecter ta base PostgreSQL à des outils comme :
 
-- [Metabase](https://www.metabase.com/)
-- [NocoDB](https://www.nocodb.com/)
-
+* [Metabase](https://www.metabase.com/)
+* [NocoDB](https://www.nocodb.com/)
 
 ---
 
 ## 📄 Licence
 
 Ce projet est sous licence **MIT**.
-
----
-
-## 🙌 Auteur
-
-Développé par **[Thibaut Modrin](https://github.com/ton-profil)**  
-Data Engineer / Freelance / Android Developer.
-
 
 
