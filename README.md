@@ -149,7 +149,7 @@ Une analyse NLP (Natural Language Processing) a été réalisée sur les descrip
 
 Cette analyse permet de mieux comprendre les tendances des missions proposées sur la plateforme (compétences recherchées, outils mentionnés, attentes des clients) sans lien officiel ou promotionnel avec la plateforme scrappée.
 
-* Les résultats peuvent être exploités pour :
+Les résultats peuvent être exploités pour :
 
 * Affiner son positionnement freelance en fonction de la demande réelle
 
