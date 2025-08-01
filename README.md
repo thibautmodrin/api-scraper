@@ -143,6 +143,24 @@ Tu peux connecter ta base PostgreSQL à des outils comme :
 
 ---
 
+## 🧠 Analyse NLP des offres
+
+Une analyse NLP (Natural Language Processing) a été réalisée sur les descriptions collectées afin d’identifier les termes les plus fréquents associés à différents mots-clés de recherche (ex : data, data engineer).
+
+Cette analyse permet de mieux comprendre les tendances des missions proposées sur la plateforme (compétences recherchées, outils mentionnés, attentes des clients) sans lien officiel ou promotionnel avec la plateforme scrappée.
+
+Les résultats peuvent être exploités pour :
+
+Affiner son positionnement freelance en fonction de la demande réelle
+
+Prioriser ses apprentissages techniques ou métiers
+
+Identifier les compétences clés à mettre en avant sur les profils professionnels
+
+L’analyse se veut purement informative et indépendante.
+
+---
+
 ## 📄 Licence
 
 Ce projet est sous licence **MIT**.
